@@ -161,7 +161,7 @@ const enviarRSVP = async () => {
       <!-- SECCIÓN DE FECHA Y HORA MEJORADA -->
       <div class="bg-sky-900/30 border border-sky-500/20 rounded-2xl p-5 mb-6 text-left shadow-inner relative">
         <div class="flex items-center gap-2 mb-3 text-sky-200 font-serif text-lg font-semibold">
-          <span>📅</span> Fecha y Hora
+          Fecha y Hora
         </div>
 
         <div class="space-y-2 text-sm text-sky-100 mb-4">
