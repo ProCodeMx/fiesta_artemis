@@ -180,7 +180,7 @@ const enviarRSVP = async () => {
         <div class="rounded-xl overflow-hidden border border-sky-500/30 shadow-md mb-4 w-full h-48">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.7461038508254!2d-100.4819235!3d20.639203300000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d351698f318015%3A0x63de782ab4a914c1!2sJard%C3%ADn%20La%20Esperanza!5e0!3m2!1ses!2smx!4v1789061506070!5m2!1ses!2smx"
-            class="w-full h-full border-0 filter invert-[90%] hue-rotate-180 opacity-90" allowfullscreen=""
+            class="w-full h-full border-0 filter invert-[90%] hue-rotate-180 opacity-90" allowfullscreen="false"
             loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
           </iframe>
         </div>
