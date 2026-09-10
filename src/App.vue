@@ -233,7 +233,7 @@ const enviarRSVP = async () => {
             </div>
 
             <div class="w-24" v-if="asistira === 'si'">
-              <label class="block text-xs font-medium text-sky-300 mb-1">Lugares</label>
+              <label class="block text-xs font-medium text-sky-300 mb-1">Personas</label>
               <input v-model.number="personas" type="number" min="1" max="10"
                 class="w-full px-3 py-2 bg-sky-950/60 border border-sky-500/30 rounded-xl text-white focus:outline-none focus:border-sky-300 transition text-sm text-center" />
             </div>
