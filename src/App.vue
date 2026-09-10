@@ -124,6 +124,7 @@ const enviarRSVP = async () => {
       <h1
         class="text-4xl font-extrabold font-serif text-transparent bg-clip-text bg-gradient-to-r from-sky-200 via-white to-sky-400 mb-4">
         Artemis Verduzco
+        <br>4 Años
       </h1>
 
       <!-- Imagen temática -->
