@@ -18,9 +18,10 @@ const mensaje = ref<string>('')
 const enviado = ref<boolean>(false)
 const cargando = ref<boolean>(false)
 const errorMsg = ref<string>('')
+const mostrarCalendarioMenu = ref<boolean>(false)
 
-// Configuración del Contador Regresivo (Septiembre 13 del año actual o próximo)
-const fechaEvento = new Date(new Date().getFullYear(), 8, 13, 14, 0, 0) // Mes 8 = Septiembre
+// Configuración del Contador Regresivo (Septiembre 13, 2026 a las 14:00 hrs)
+const fechaEvento = new Date(2026, 8, 13, 14, 0, 0) // Mes 8 = Septiembre
 const dias = ref<number>(0)
 const horas = ref<number>(0)
 const minutos = ref<number>(0)
@@ -47,6 +48,37 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(timer)
 })
+
+// Enlaces dinámicos para agregar al calendario
+const tituloEvento = encodeURIComponent('Cumpleaños de Artemis - Reino de Hielo')
+const descripcionEvento = encodeURIComponent('¡Te esperamos para celebrar el cumpleaños de Artemis en el Jardín La Esperanza!')
+const ubicacionEvento = encodeURIComponent('Jardín La Esperanza, Querétaro')
+const fechaInicioGoogle = '20260913T140000'
+const fechaFinGoogle = '20260913T220000'
+
+const urlGoogleCalendar = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${tituloEvento}&dates=${fechaInicioGoogle}/${fechaFinGoogle}&details=${descripcionEvento}&location=${ubicacionEvento}`
+
+// Generador de archivo .ics para Apple Calendar / Outlook
+const descargarICS = () => {
+  const contenidoIcs = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:Cumpleaños de Artemis - Reino de Hielo
+DESCRIPTION:¡Te esperamos para celebrar el cumpleaños de Artemis en el Jardín La Esperanza!
+LOCATION:Jardín La Esperanza, Querétaro
+DTSTART:20260913T140000
+DTEND:20260913T190000
+END:VEVENT
+END:VCALENDAR`
+
+  const blob = new Blob([contenidoIcs], { type: 'text/calendar;charset=utf-8' })
+  const link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.setAttribute('download', 'cumpleanos-artemis.ics')
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
 
 // Función para enviar los datos a PostgreSQL
 const enviarRSVP = async () => {
@@ -84,7 +116,7 @@ const enviarRSVP = async () => {
     <div
       class="max-w-md w-full bg-sky-950/40 backdrop-blur-xl border border-sky-300/30 rounded-3xl shadow-2xl overflow-hidden p-6 text-center relative shadow-sky-500/10">
 
-      <!-- Decoración tipo Elsa / Copos de nieve flotantes -->
+      <!-- Copos de nieve decorativos -->
       <div class="absolute top-4 left-4 text-sky-200 text-xl animate-pulse">❄️</div>
       <div class="absolute top-4 right-4 text-sky-200 text-xl animate-pulse">❄️</div>
 
@@ -94,20 +126,13 @@ const enviarRSVP = async () => {
         Artemis Verduzco
       </h1>
 
-      <!-- Imagen temática de Elsa / Invierno -->
+      <!-- Imagen temática -->
       <div class="my-4 rounded-2xl overflow-hidden shadow-xl border border-sky-400/30 relative group">
         <img
           src="https://ep01.epimg.net/verne/imagenes/2019/11/21/articulo/1574343498_750089_1574354089_noticia_normal.jpg"
           alt="Frozen Theme"
           class="w-full h-48 object-cover opacity-90 group-hover:scale-105 transition duration-700" />
         <div class="absolute inset-0 bg-gradient-to-t from-sky-950/60 via-transparent to-transparent"></div>
-      </div>
-
-      <!-- Detalles del Evento -->
-      <div
-        class="space-y-2 text-lg text-sky-100 mb-6 bg-sky-900/30 p-4 rounded-2xl border border-sky-500/20 shadow-inner">
-        <p class="flex items-center justify-center gap-2">📅 <strong>Fecha:</strong> Septiembre 13 a las 14:00 hrs</p>
-        <p class="flex items-center justify-center gap-2">🏰 <strong>Lugar:</strong> Jardín La Esperanza</p>
       </div>
 
       <!-- Contador Regresivo -->
@@ -133,11 +158,56 @@ const enviarRSVP = async () => {
         </div>
       </div>
 
-      <!-- Botón de Ubicación actualizados -->
-      <a href="https://share.google/TiLEjbmkuzEIJg97E" target="_blank"
-        class="block w-full py-3 px-4 bg-gradient-to-r from-sky-400 to-blue-600 hover:from-sky-300 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg shadow-sky-500/20 transition duration-200 mb-6 text-center text-sm tracking-wide">
-        🗺️ Ver Ubicación en el Mapa
-      </a>
+      <!-- SECCIÓN DE FECHA Y HORA MEJORADA -->
+      <div class="bg-sky-900/30 border border-sky-500/20 rounded-2xl p-5 mb-6 text-left shadow-inner relative">
+        <div class="flex items-center gap-2 mb-3 text-sky-200 font-serif text-lg font-semibold">
+          <span>📅</span> Fecha y Hora
+        </div>
+
+        <div class="space-y-2 text-sm text-sky-100 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="text-base">📅</span> <span>Domingo, 13 de septiembre de 2026</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-base">⏰</span> <span>2:00 p. m.</span>
+          </div>
+          <div class="flex items-center gap-2 pt-1">
+            <span class="text-base">🏰</span> <span class="font-semibold text-sky-200">Jardín La Esperanza</span>
+          </div>
+        </div>
+
+        <!-- MAPA INCORPORADO (IFRAME) -->
+        <div class="rounded-xl overflow-hidden border border-sky-500/30 shadow-md mb-4 w-full h-48">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.7461038508254!2d-100.4819235!3d20.639203300000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d351698f318015%3A0x63de782ab4a914c1!2sJard%C3%ADn%20La%20Esperanza!5e0!3m2!1ses!2smx!4v1789061506070!5m2!1ses!2smx"
+            class="w-full h-full border-0 filter invert-[90%] hue-rotate-180 opacity-90" allowfullscreen=""
+            loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
+          </iframe>
+        </div>
+
+        <!-- Botón desplegable de Agregar al Calendario -->
+        <div class="relative">
+          <button @click="mostrarCalendarioMenu = !mostrarCalendarioMenu"
+            class="w-full py-2.5 px-4 bg-sky-800/80 hover:bg-sky-700 text-sky-100 font-semibold rounded-xl shadow transition duration-200 flex items-center justify-center gap-2 text-sm cursor-pointer border border-sky-400/30">
+            <span>📅</span> Agregar al Calendario <span>▼</span>
+          </button>
+
+          <!-- Menú desplegable de opciones de calendario -->
+          <div v-if="mostrarCalendarioMenu"
+            class="absolute left-0 right-0 mt-2 bg-sky-950 border border-sky-500/40 rounded-xl shadow-2xl overflow-hidden z-20 text-sm">
+            <a :href="urlGoogleCalendar" target="_blank"
+              class="block px-4 py-2.5 text-sky-200 hover:bg-sky-900/60 transition text-left border-b border-sky-900/50">
+              Google Calendar
+            </a>
+            <button @click="descargarICS"
+              class="w-full text-left px-4 py-2.5 text-sky-200 hover:bg-sky-900/60 transition cursor-pointer">
+              Apple / Outlook (Archivo .ics)
+            </button>
+          </div>
+        </div>
+      </div>
+
+
 
       <hr class="border-sky-800/40 my-6">
 
